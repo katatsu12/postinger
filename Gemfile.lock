@@ -40,18 +40,7 @@ GEM
       tzinfo (~> 1.1)
     arel (7.1.4)
     ast (2.3.0)
-    autoprefixer-rails (6.7.7)
-      execjs
-<<<<<<< HEAD
     bcrypt (3.1.11)
-    bootstrap (4.0.0.alpha6)
-      autoprefixer-rails (>= 6.0.3)
-      sass (>= 3.4.19)
-=======
-    bootstrap-sass (3.3.7)
-      autoprefixer-rails (>= 5.2.1)
-      sass (>= 3.3.4)
->>>>>>> 855dc11c562b5026814ab4113cb4d692b3281661
     builder (3.2.3)
     byebug (9.0.6)
     coffee-rails (4.2.1)
@@ -82,12 +71,8 @@ GEM
     ffi (1.9.18)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
-<<<<<<< HEAD
     hashie (3.5.5)
-=======
-    haml (4.0.7)
       tilt
->>>>>>> 855dc11c562b5026814ab4113cb4d692b3281661
     i18n (0.8.1)
     jbuilder (2.6.3)
       activesupport (>= 3.0.0, < 5.2)
