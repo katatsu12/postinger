@@ -22,6 +22,7 @@ gem 'therubyracer'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 
 group :development, :test do
   gem 'byebug', platform: :mri
