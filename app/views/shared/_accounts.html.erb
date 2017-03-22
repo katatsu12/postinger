@@ -1,0 +1,22 @@
+<h2>Accounts</h2>
+
+<div>
+  <%= link_to 'Add account', new_user_path  %>
+</div>
+
+<table>
+  <tr>
+    <th>#</th>
+    <th>Accounts</th>
+    <th></th>
+  </tr>
+    <% User.all.each_with_index do |user, index| %>
+    <tr>
+      <td><%= index.to_i + 1 %></td>
+      <td>
+        <%= link_to user.email, user_path(user) %>
+        <%= link_to 'Delete', user_path(user), method: :delete, date: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+</table>

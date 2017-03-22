@@ -16,6 +16,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'haml', '~> 4.0', '>= 4.0.7'
 gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
 gem 'rubocop', require: false
+gem 'simple_form'
 
 gem 'therubyracer'
 gem 'devise'
