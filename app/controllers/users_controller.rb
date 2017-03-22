@@ -5,14 +5,14 @@ class UsersController < ApplicationController
   end
 
   def create
-    become
     @user = User.new(user_params)
-    if @user.save
-      flash[:success] = "User was successufly created"
-      redirect_to(:back)
-    else
-      render 'new'
-    end
+    sign_in @user, :bypass => true 
+    #if @user.save
+    #  flash[:success] = "User was successufly created"
+    #  redirect_to(:back)
+    #else
+    #  render 'new'
+    #end
   end
 
   def destroy
@@ -21,6 +21,8 @@ class UsersController < ApplicationController
       redirect_to (:back)
     end
   end
+
+  private
 
   def become
     return unless current_user?
