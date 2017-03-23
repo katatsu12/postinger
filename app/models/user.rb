@@ -14,6 +14,8 @@ class User < ApplicationRecord
       user.uid = auth.uid
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
+      user.token_twitter = auth.credentials.token
+      user.secret_twitter = auth.credentials.secret
     end
   end
 
@@ -23,6 +25,15 @@ class User < ApplicationRecord
       user.uid = auth.uid
       user.email = auth.extra.raw_info.domain+'@vk.com'
       user.password = Devise.friendly_token[0,20]
+    end
+  end
+
+  def to_twitter
+    @client ||= Twitter::REST::Client.new do |config|
+      config.consumer_key        = 'DwFZ3JFjUvQl4b1oJIQos3ghT'
+      config.consumer_secret     = 'q6W8qpEDRuOln8GQIfFrtKPWlQw73qbohQl4EBjo6VWHMORa9D'
+      config.access_token        = token_twitter
+      config.access_token_secret = secret_twitter
     end
   end
 end
