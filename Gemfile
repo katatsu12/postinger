@@ -5,8 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.0.2'
 gem 'sqlite3'
+gem 'rails', '~> 5.0.2'
 gem 'puma', '~> 3.0'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -16,14 +16,23 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'haml', '~> 4.0', '>= 4.0.7'
 gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
-gem 'simple_form', '~> 3.4'
 gem 'rubocop', require: false
+gem 'simple_form'
+gem 'twitter'
 
 gem 'therubyracer'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'trix'
+gem 'omniauth-twitter'
+gem 'omniauth-vkontakte'
+gem 'cancancan'
+
+#group :production do
+#  gem 'pg'
+#  gem 'rails_12factor'
+#end
 
 group :development, :test do
   gem 'byebug', platform: :mri
