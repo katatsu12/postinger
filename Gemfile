@@ -19,7 +19,7 @@ gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
 gem 'rubocop', require: false
 gem 'simple_form'
 gem 'twitter'
-
+gem 'koala'
 gem 'therubyracer'
 gem 'devise'
 gem 'omniauth'

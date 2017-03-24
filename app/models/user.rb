@@ -14,8 +14,6 @@ class User < ApplicationRecord
       user.uid = auth.uid
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
-      user.token_twitter = auth.credentials.token
-      user.secret_twitter = auth.credentials.secret
       user.account_id = @user_current
     end
   end
@@ -27,6 +25,8 @@ class User < ApplicationRecord
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
       user.account_id = @user_current
+      user.token_facebook = auth.credentials.token
+      user.expires_at = auth.credentials.expires_at
     end
   end
 
@@ -51,13 +51,17 @@ class User < ApplicationRecord
     end
   end
 
-  def to_twitter
+  def twitter
     @client ||= Twitter::REST::Client.new do |config|
-      config.consumer_key        = 'DwFZ3JFjUvQl4b1oJIQos3ghT'
-      config.consumer_secret     = 'q6W8qpEDRuOln8GQIfFrtKPWlQw73qbohQl4EBjo6VWHMORa9D'
+      config.consumer_key        = Rails.application.secrets.twitter_api_key
+      config.consumer_secret     = Rails.application.secrets.twitter_api_secret
       config.access_token        = token_twitter
       config.access_token_secret = secret_twitter
     end
+  end
+
+  def facebook
+    @facebook ||= Koala::Facebook::API.new(token_facebook)
   end
 
   def user_current
