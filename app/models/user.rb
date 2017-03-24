@@ -16,6 +16,29 @@ class User < ApplicationRecord
       user.password = Devise.friendly_token[0,20]
       user.token_twitter = auth.credentials.token
       user.secret_twitter = auth.credentials.secret
+      user.account_id = @user_current
+    end
+  end
+
+ def self.from_facebook(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.provider = auth.provider
+      user.uid = auth.uid
+      user.email = auth.info.email
+      user.password = Devise.friendly_token[0,20]
+      user.account_id = @user_current
+    end
+  end
+
+  def self.from_twitter(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.provider = auth.provider
+      user.uid = auth.uid
+      user.email = auth.info.email
+      user.password = Devise.friendly_token[0,20]
+      user.token_twitter = auth.credentials.token
+      user.secret_twitter = auth.credentials.secret
+      user.account_id = @user_current
     end
   end
 
@@ -35,5 +58,9 @@ class User < ApplicationRecord
       config.access_token        = token_twitter
       config.access_token_secret = secret_twitter
     end
+  end
+
+  def user_current
+    @user_current = User.find(session[:user_id]) if session[:user_id]
   end
 end
