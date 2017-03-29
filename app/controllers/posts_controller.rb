@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   def index
     @posts = Post.where(user_id: [current_user.id])
     @accounts = Account.where(user_id: [current_user.id])
-  end
+ end
 
   def show
   end
@@ -23,7 +23,6 @@ class PostsController < ApplicationController
       if @post.save
         format.html { redirect_to @post, notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
-        user.twitter.update(body)
       else
         format.html { render :new }
         format.json { render json: @post.errors, status: :unprocessable_entity }
