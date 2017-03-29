@@ -1,66 +1,53 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  has_many :post
+  has_many :posts
+  has_many :accounts 
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable,
          :omniauth_providers => [:facebook, :twitter, :vkontakte]
 
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.token_twitter = auth.credentials.token
-      user.secret_twitter = auth.credentials.secret
-      user.account_id = @user_current
-    end
-  end
-
- def self.from_facebook(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.account_id = @user_current
-    end
-  end
-
   def self.from_twitter(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.token_twitter = auth.credentials.token
-      user.secret_twitter = auth.credentials.secret
-      user.account_id = @user_current
+    user = Account.where(uid: auth.uid, provider: auth.provider).first
+      unless user.nil?
+        user.user
+      else
+        registered_user = User.where(username: auth.info.nickname).first
+      unless registered_user.nil?
+        Account.create!( 
+          provider: auth.provider,
+          uid: auth.uid,
+          email: auth.info.email,
+          token_twitter: auth.credentials.token,
+          secret_twitter: auth.credentials.secret,
+          user_id: registered_user.id)
+        registered_user
+      else
+        user = User.create!(
+          email: auth.info.email,
+          password: Devise.friendly_token[0,20],
+          username: auth.info.nickname)
+        account = Account.create!(
+          provider: auth.provider,
+          uid: auth.uid,
+          email: auth.info.email,
+          token_twitter: auth.credentials.token,
+          secret_twitter: auth.credentials.secret,
+          user_id: user.id)
+        user
+      end
     end
   end
 
-  def self.from_vk(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.extra.raw_info.domain+'@vk.com'
-      user.password = Devise.friendly_token[0,20]
-    end
-  end
-
-  def to_twitter
+  def twitter
     @client ||= Twitter::REST::Client.new do |config|
-      config.consumer_key        = 'DwFZ3JFjUvQl4b1oJIQos3ghT'
-      config.consumer_secret     = 'q6W8qpEDRuOln8GQIfFrtKPWlQw73qbohQl4EBjo6VWHMORa9D'
+      config.consumer_key        = Rails.application.secrets.twitter_api_key
+      config.consumer_secret     = Rails.application.secrets.twitter_api_secret
       config.access_token        = token_twitter
       config.access_token_secret = secret_twitter
     end
   end
-
-  def user_current
-    @user_current = User.find(session[:user_id]) if session[:user_id]
-  end
+	
 end
