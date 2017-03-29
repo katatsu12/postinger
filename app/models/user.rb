@@ -1,6 +1,7 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  TEMP_EMAIL_PREFIX = 'change@me'
+  TEMP_EMAIL_REGEX = /\Achange@me/
+
   has_many :posts
   has_many :accounts 
 
@@ -9,45 +10,34 @@ class User < ApplicationRecord
          :omniauthable,
          :omniauth_providers => [:facebook, :twitter, :vkontakte]
 
-  def self.from_twitter(auth)
-    user = Account.where(uid: auth.uid, provider: auth.provider).first
-      unless user.nil?
-        user.user
-      else
-        registered_user = User.where(username: auth.info.nickname).first
-      unless registered_user.nil?
-        Account.create!( 
-          provider: auth.provider,
-          uid: auth.uid,
-          email: auth.info.email,
-          token_twitter: auth.credentials.token,
-          secret_twitter: auth.credentials.secret,
-          user_id: registered_user.id)
-        registered_user
-      else
-        user = User.create!(
-          email: auth.info.email,
-          password: Devise.friendly_token[0,20],
-          username: auth.info.nickname)
-        account = Account.create!(
-          provider: auth.provider,
-          uid: auth.uid,
-          email: auth.info.email,
-          token_twitter: auth.credentials.token,
-          secret_twitter: auth.credentials.secret,
-          user_id: user.id)
-        user
+  def self.find_for_oauth(auth, signed_in_resource = nil)
+
+    identity = Account.find_for_oauth(auth)
+    user = signed_in_resource ? signed_in_resource : identity.user
+    if user.nil?
+      email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
+      email = auth.info.email if email_is_verified
+      user = User.where(:email => email).first if email
+      if user.nil?
+        user = User.new(
+          username: auth.extra.raw_info.name,
+          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
+          #email: auth.info.email,
+          password: Devise.friendly_token[0,20]
+        )
+        #user.skip_confirmation!
+        user.save!
       end
     end
+
+    if identity.user != user
+      identity.user = user
+      identity.save!
+    end
+    user
   end
 
-  def twitter
-    @client ||= Twitter::REST::Client.new do |config|
-      config.consumer_key        = Rails.application.secrets.twitter_api_key
-      config.consumer_secret     = Rails.application.secrets.twitter_api_secret
-      config.access_token        = secret_twitter
-      config.access_token_secret = secret_twitter
-    end
+  def email_verified?
+    self.email && self.email !~ TEMP_EMAIL_REGEX
   end
-	
 end
