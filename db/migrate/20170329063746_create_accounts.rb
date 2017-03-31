@@ -4,8 +4,8 @@ class CreateAccounts < ActiveRecord::Migration[5.0]
       t.string :provider
       t.string :uid
       t.string :email
-      t.string :token_twitter
-      t.string :secret_twitter
+      t.string :token
+      t.string :secret
       t.references :user, foreign_key: true
 
       t.timestamps

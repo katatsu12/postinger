@@ -16,11 +16,11 @@ ActiveRecord::Schema.define(version: 20170329063958) do
     t.string   "provider"
     t.string   "uid"
     t.string   "email"
-    t.string   "token_twitter"
-    t.string   "secret_twitter"
+    t.string   "token"
+    t.string   "secret"
     t.integer  "user_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
