@@ -50,6 +50,11 @@ class PostsController < ApplicationController
     end
   end
 
+  def find_secret
+    @token = current_user.token_twitter
+    @secret = current_user.secret_twitter
+  end
+
   private
     def set_post
       @post = Post.find(params[:id])

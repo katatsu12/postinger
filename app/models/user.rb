@@ -21,8 +21,8 @@ class User < ApplicationRecord
       if user.nil?
         user = User.new(
           username: auth.extra.raw_info.name,
-          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
-          #email: auth.info.email,
+          #email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
+          email: auth.info.email,
           password: Devise.friendly_token[0,20]
         )
         #user.skip_confirmation!
@@ -39,5 +39,31 @@ class User < ApplicationRecord
 
   def email_verified?
     self.email && self.email !~ TEMP_EMAIL_REGEX
+  end
+
+  #get current user
+  class << self
+    def current_user=(user)
+      Thread.current[:current_user] = user
+    end
+
+    def current_user
+      Thread.current[:current_user]
+    end
+  end
+
+  #get current account hash
+  def find_account
+    user = User.current_user
+    account = Account.where(user_id: user.id).find_or_create_by('')
+  end  
+
+  def twitter
+    @client ||= Twitter::REST::Client.new do |config|
+      config.consumer_key        = Rails.application.secrets.twitter_api_key
+      config.consumer_secret     = Rails.application.secrets.twitter_api_secret
+      config.access_token        = find_account.token_twitter
+      config.access_token_secret = find_account.secret_twitter
+    end
   end
 end
