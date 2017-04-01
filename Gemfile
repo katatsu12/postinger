@@ -29,6 +29,7 @@ gem 'paperclip'
 gem 'omniauth-twitter'
 gem 'omniauth-vkontakte'
 gem 'cancancan'
+gem 'omniauth-google-oauth2'
 
 #group :production do
 #  gem 'pg'

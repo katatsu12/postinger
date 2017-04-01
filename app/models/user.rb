@@ -8,7 +8,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable,
-         :omniauth_providers => [:facebook, :twitter, :vkontakte]
+         :omniauth_providers => [:facebook, :twitter, :vkontakte, :google_oauth2]
 
   def self.find_for_oauth(auth, signed_in_resource = nil)
 

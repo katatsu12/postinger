@@ -18,6 +18,14 @@ class Account < ApplicationRecord
         token: auth.credentials.token,
         secret: auth.credentials.expires_at
       )
+    elsif ['google_oauth2'].include?(auth.provider)
+     find_or_create_by(
+        uid: auth.uid,
+        provider: auth.provider,
+        email: auth.info.email,
+        token: auth.credentials.token,
+        secret: Time.at(auth.credentials.expires_at)
+      )
     end
   end
 end
