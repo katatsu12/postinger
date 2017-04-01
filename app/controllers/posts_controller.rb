@@ -50,12 +50,18 @@ class PostsController < ApplicationController
     end
   end
 
-  private
-    def set_post
-      @post = Post.find(params[:id])
-    end
+  def send_tweet
+    current_user.twitter(params[:body].inspect)
+    redirect_to :back, notice: 'Post was seccusefully send to twitter'
+  end
 
-    def post_params
-      params.require(:post).permit(:title, :body, :user_id)
-    end
+  private
+
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+  def post_params
+    params.require(:post).permit(:title, :body, :user_id)
+  end
 end

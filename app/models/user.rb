@@ -58,12 +58,19 @@ class User < ApplicationRecord
     account = Account.where(user_id: user.id).find_or_create_by('')
   end  
 
-  def twitter
+  def message
+    user = User.current_user
+    post = Post.where(user_id: user.id).first
+  end
+
+  def twitter(body)
     @client ||= Twitter::REST::Client.new do |config|
       config.consumer_key        = Rails.application.secrets.twitter_api_key
       config.consumer_secret     = Rails.application.secrets.twitter_api_secret
-      config.access_token        = find_account.token_twitter
-      config.access_token_secret = find_account.secret_twitter
+      config.access_token        = find_account.token
+      config.access_token_secret = find_account.secret
     end
+    
+    @client.update(message.body)
   end
 end
