@@ -1,70 +1,75 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  has_many :post
+  TEMP_EMAIL_PREFIX = 'change@me'
+  TEMP_EMAIL_REGEX = /\Achange@me/
+
+  has_many :posts
+  has_many :accounts 
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable,
          :omniauth_providers => [:facebook, :twitter, :vkontakte]
 
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.account_id = @user_current
+  def self.find_for_oauth(auth, signed_in_resource = nil)
+
+    identity = Account.find_for_oauth(auth)
+    user = signed_in_resource ? signed_in_resource : identity.user
+    if user.nil?
+      email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
+      email = auth.info.email if email_is_verified
+      user = User.where(:email => email).first if email
+      if user.nil?
+        user = User.new(
+          username: auth.extra.raw_info.name,
+          #email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
+          email: auth.info.email,
+          password: Devise.friendly_token[0,20]
+        )
+        #user.skip_confirmation!
+        user.save!
+      end
+    end
+
+    if identity.user != user
+      identity.user = user
+      identity.save!
+    end
+    user
+  end
+
+  def email_verified?
+    self.email && self.email !~ TEMP_EMAIL_REGEX
+  end
+
+  #get current user
+  class << self
+    def current_user=(user)
+      Thread.current[:current_user] = user
+    end
+
+    def current_user
+      Thread.current[:current_user]
     end
   end
 
- def self.from_facebook(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.account_id = @user_current
-      user.token_facebook = auth.credentials.token
-      user.expires_at = auth.credentials.expires_at
-    end
+  #get current account hash
+  def find_account
+    user = User.current_user
+    account = Account.where(user_id: user.id).find_or_create_by('')
+  end  
+
+  def message
+    user = User.current_user
+    post = Post.where(user_id: user.id).first
   end
 
-  def self.from_twitter(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.token_twitter = auth.credentials.token
-      user.secret_twitter = auth.credentials.secret
-      user.account_id = @user_current
-    end
-  end
-
-  def self.from_vk(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.extra.raw_info.domain+'@vk.com'
-      user.password = Devise.friendly_token[0,20]
-    end
-  end
-
-  def twitter
+  def twitter(body)
     @client ||= Twitter::REST::Client.new do |config|
       config.consumer_key        = Rails.application.secrets.twitter_api_key
       config.consumer_secret     = Rails.application.secrets.twitter_api_secret
-      config.access_token        = token_twitter
-      config.access_token_secret = secret_twitter
+      config.access_token        = find_account.token
+      config.access_token_secret = find_account.secret
     end
-  end
-
-  def facebook
-    @facebook ||= Koala::Facebook::API.new(token_facebook)
-  end
-
-  def user_current
-    @user_current = User.find(session[:user_id]) if session[:user_id]
+    @client.update(message.body)
   end
 end

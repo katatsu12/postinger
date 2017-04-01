@@ -278,3 +278,4 @@ Devise.setup do |config|
   config.omniauth :twitter, Rails.application.secrets.twitter_api_key, Rails.application.secrets.twitter_api_secret
   config.omniauth :vkontakte, Rails.application.secrets.vk_api_key, Rails.application.secrets.vk_api_secret
 end
+

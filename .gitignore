@@ -20,5 +20,10 @@
 # Ignore Byebug command history file.
 .byebug_history
 
+<<<<<<< HEAD
 config/secrets.yml
 /config/secrets.yml
+=======
+/config/secrets.yml
+config/secrets.yml
+>>>>>>> origin/alex

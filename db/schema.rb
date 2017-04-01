@@ -10,19 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170324122127) do
-
-  create_table "pictures", force: :cascade do |t|
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-  end
+ActiveRecord::Schema.define(version: 20170329063958) do
 
   create_table "accounts", force: :cascade do |t|
-    t.string   "account"
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "email"
+    t.string   "token"
+    t.string   "secret"
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -32,12 +27,6 @@ ActiveRecord::Schema.define(version: 20170324122127) do
   create_table "posts", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
@@ -57,14 +46,7 @@ ActiveRecord::Schema.define(version: 20170324122127) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.string   "provider"
-    t.string   "uid"
-    t.string   "account_id"
-    t.string   "token_twitter"
-    t.string   "secret_twitter"
-    t.string   "token_facebook"
-    t.string   "secret_facebook"
-    t.string   "expires_at"
+    t.string   "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
