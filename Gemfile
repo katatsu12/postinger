@@ -30,6 +30,7 @@ gem 'omniauth-twitter'
 gem 'omniauth-vkontakte'
 gem 'cancancan'
 gem 'omniauth-google-oauth2'
+gem 'google-api-client', '~> 0.10'
 
 #group :production do
 #  gem 'pg'
