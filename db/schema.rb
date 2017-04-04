@@ -16,8 +16,11 @@ ActiveRecord::Schema.define(version: 20170329063958) do
     t.string   "provider"
     t.string   "uid"
     t.string   "email"
-    t.string   "token"
-    t.string   "secret"
+    t.string   "token_tw"
+    t.string   "secret_tw"
+    t.string   "token_g"
+    t.string   "token_vk"
+    t.string   "token_fb"
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

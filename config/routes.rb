@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   root 'posts#index'
   match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
   post '/send_tweet', to: 'posts#send_tweet'
+  post '/send_vk', to: 'posts#send_vk'
 end

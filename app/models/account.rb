@@ -7,24 +7,29 @@ class Account < ApplicationRecord
         uid: auth.uid, 
         provider: auth.provider,
         email: auth.info.email,
-        token: auth.credentials.token, 
-        secret: auth.credentials.secret
+        token_tw: auth.credentials.token, 
+        secret_tw: auth.credentials.secret
       )
     elsif ['facebook'].include?(auth.provider)
-     find_or_create_by(
+      find_or_create_by(
         uid: auth.uid,
         provider: auth.provider,
         email: auth.info.email,
-        token: auth.credentials.token,
-        secret: auth.credentials.expires_at
+        token_fb: auth.credentials.token
       )
     elsif ['google_oauth2'].include?(auth.provider)
-     find_or_create_by(
+      find_or_create_by(
         uid: auth.uid,
         provider: auth.provider,
         email: auth.info.email,
-        token: auth.credentials.token,
-        secret: Time.at(auth.credentials.expires_at)
+        token_g: auth.credentials.token
+      )
+    elsif ['vkontakte'].include?(auth.provider)
+      find_or_create_by(
+        uid: auth.uid,
+        provider: auth.provider,
+        email: auth.info.email,
+        token_vk: auth.credentials.token
       )
     end
   end

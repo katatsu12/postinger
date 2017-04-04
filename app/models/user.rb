@@ -67,9 +67,14 @@ class User < ApplicationRecord
     @client ||= Twitter::REST::Client.new do |config|
       config.consumer_key        = Rails.application.secrets.twitter_api_key
       config.consumer_secret     = Rails.application.secrets.twitter_api_secret
-      config.access_token        = find_account.token
-      config.access_token_secret = find_account.secret
+      config.access_token        = find_account.token_tw
+      config.access_token_secret = find_account.secret_tw
     end
     @client.update(message.body)
+  end
+
+  def vk(body)
+    @vk = Vkontakte::Client.new(find_account.token_vk)
+    @vk.wall.post(message: [:body])
   end
 end

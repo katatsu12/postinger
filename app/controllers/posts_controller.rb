@@ -52,7 +52,12 @@ class PostsController < ApplicationController
 
   def send_tweet
     current_user.twitter(params[:body].inspect)
-    redirect_to :back, notice: 'Post was seccusefully send to twitter'
+    redirect_to :back, notice: 'Post was seccussefully send to twitter'
+  end
+
+  def send_vk
+    current_user.vk(params[:body].inspect)
+    redirect_to :nack, notice: 'Post was seccussefully send to vk'
   end
 
   private
