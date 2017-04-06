@@ -1,20 +1,18 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: %i[show edit update destroy]
 
   def index
     @posts = Post.where(user_id: [current_user.id])
     @accounts = Account.where(user_id: [current_user.id])
  end
 
-  def show
-  end
+  def show; end
 
   def new
-    @post = Post.new #current_user.posts.build
+    @post = Post.new # current_user.posts.build
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @post = Post.new(post_params)

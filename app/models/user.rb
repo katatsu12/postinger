@@ -1,31 +1,30 @@
 class User < ApplicationRecord
-  TEMP_EMAIL_PREFIX = 'change@me'
+  TEMP_EMAIL_PREFIX = 'change@me'.freeze
   TEMP_EMAIL_REGEX = /\Achange@me/
 
   has_many :posts
-  has_many :accounts 
+  has_many :accounts
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable,
-         :omniauth_providers => [:facebook, :twitter, :vkontakte, :google_oauth2]
+         omniauth_providers: %i[facebook twitter vkontakte google_oauth2]
 
   def self.find_for_oauth(auth, signed_in_resource = nil)
-
     identity = Account.find_for_oauth(auth)
     user = signed_in_resource ? signed_in_resource : identity.user
     if user.nil?
       email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
       email = auth.info.email if email_is_verified
-      user = User.where(:email => email).first if email
+      user = User.where(email: email).first if email
       if user.nil?
         user = User.new(
           username: auth.extra.raw_info.name,
-          #email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
-          email: auth.info.email,
-          password: Devise.friendly_token[0,20]
+          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
+          # email: auth.info.email,
+          password: Devise.friendly_token[0, 20]
         )
-        #user.skip_confirmation!
+        user.skip_confirmation!
         user.save!
       end
     end
@@ -38,10 +37,10 @@ class User < ApplicationRecord
   end
 
   def email_verified?
-    self.email && self.email !~ TEMP_EMAIL_REGEX
+    email && email !~ TEMP_EMAIL_REGEX
   end
 
-  #get current user
+  # get current user
   class << self
     def current_user=(user)
       Thread.current[:current_user] = user
@@ -52,18 +51,18 @@ class User < ApplicationRecord
     end
   end
 
-  #get current account hash
+  # get current account hash
   def find_account
     user = User.current_user
     accounts = Account.where(user_id: user.id)
-  end  
+  end
 
   def message
     user = User.current_user
     post = Post.where(user_id: user.id).first
   end
 
-  def twitter(body)
+  def twitter(_body)
     secret = Account.where(provider: 'twitter').first
     @client ||= Twitter::REST::Client.new do |config|
       config.consumer_key        = Rails.application.secrets.twitter_api_key
@@ -75,8 +74,8 @@ class User < ApplicationRecord
   end
 
   def vk(body)
-    sectet = Account.where(provider: 'vkontakte').first
+    secret = Account.where(provider: 'vkontakte').first
     @vk = VkontakteApi::Client.new(secret.token_vk)
-    @vk.wall.post(message: (body))
+    @vk.wall.post(message: body)
   end
 end

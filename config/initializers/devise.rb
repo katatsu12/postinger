@@ -279,4 +279,3 @@ Devise.setup do |config|
   config.omniauth :vkontakte, Rails.application.secrets.vk_api_key, Rails.application.secrets.vk_api_secret
   config.omniauth :google_oauth2, Rails.application.secrets.google_api_id, Rails.application.secrets.google_api_key
 end
-

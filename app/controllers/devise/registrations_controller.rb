@@ -1,7 +1,7 @@
 class Devise::RegistrationsController < DeviseController
-  prepend_before_action :require_no_authentication, only: [:new, :create, :cancel]
-  prepend_before_action :authenticate_scope!, only: [:edit, :update, :destroy]
-  prepend_before_action :set_minimum_password_length, only: [:new, :edit]
+  prepend_before_action :require_no_authentication, only: %i[new create cancel]
+  prepend_before_action :authenticate_scope!, only: %i[edit update destroy]
+  prepend_before_action :set_minimum_password_length, only: %i[new edit]
 
   # GET /resource/sign_up
   def new
@@ -68,7 +68,7 @@ class Devise::RegistrationsController < DeviseController
     Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
     set_flash_message! :notice, :destroyed
     yield resource if block_given?
-    respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
+    respond_with_navigational(resource) { redirect_to after_sign_out_path_for(resource_name) }
   end
 
   # GET /resource/cancel
@@ -97,7 +97,7 @@ class Devise::RegistrationsController < DeviseController
 
   # Build a devise resource passing in the session. Useful to move
   # temporary session data to the newly created user.
-  def build_resource(hash=nil)
+  def build_resource(hash = nil)
     self.resource = resource_class.new_with_session(hash || {}, session)
   end
 
@@ -119,7 +119,7 @@ class Devise::RegistrationsController < DeviseController
     scope = Devise::Mapping.find_scope!(resource)
     router_name = Devise.mappings[scope].router_name
     context = router_name ? send(router_name) : self
-    context.respond_to?(:root_path) ? context.root_path : "/"
+    context.respond_to?(:root_path) ? context.root_path : '/'
   end
 
   # The default url to be used after updating a resource. You need to overwrite
