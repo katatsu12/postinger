@@ -1,11 +1,37 @@
 <%= simple_form_for(@account) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :account %>
-    <%= f.association :user %>
+  <div>
+    <%= f.label :uid %>
+    <%= f.text_field :uid %>
   </div>
 
+  <div>
+    <%= f.label :provider %>
+    <%= f.text_field :provider %>
+  </div>
+
+  <div>
+    <%= f.label :email %>
+    <%= f.text_field :email, size: 40 %>
+  </div>
+
+  <% if @account.provider == 'vkontakte'%>
+    <div>
+      <%= f.label :token_vk %>
+      <%= f.text_field :token_vk, size: 110 %>
+    </div>
+  <% else @account.provider == 'twitter' %>
+    <div>
+      <%= f.label :token_tw %>
+      <%= f.text_field :token_tw, size: 110 %>
+    </div>
+    <div>
+      <%= f.label :secret_tw %>
+      <%= f.text_field :secret_tw, size: 110 %>
+    </div>
+  <% end %>
+  
   <div class="form-actions">
     <%= f.button :submit %>
   </div>

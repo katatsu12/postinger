@@ -57,7 +57,7 @@ class PostsController < ApplicationController
 
   def send_vk
     current_user.vk(params[:body].inspect)
-    redirect_to :nack, notice: 'Post was seccussefully send to vk'
+    redirect_to :back, notice: 'Post was seccussefully send to vk'
   end
 
   private

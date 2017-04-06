@@ -1,7 +1,10 @@
 <h2>Accounts</h2>
 
 <div>
-  <%= link_to 'Add twitter account', '/users/auth/twitter'  %>
+  <%= link_to 'Add twitter account', '/users/auth/twitter' %>
+  <%= link_to 'Add fb account', '/users/auth/facebook' %>
+  <%= link_to 'Add google account', '/users/auth/google_oauth2' %>
+  <%= link_to 'Add VK account', '/users/auth/vkontakte' %>
 </div>
 
 <table>
@@ -16,6 +19,7 @@
       <td>
         <%= account.provider %>
         <%= account.email %>
+        <%= link_to 'Show', account %>
       </td>
     </tr>
   <% end %>

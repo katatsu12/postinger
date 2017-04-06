@@ -28,8 +28,8 @@ class Account < ApplicationRecord
       find_or_create_by(
         uid: auth.uid,
         provider: auth.provider,
-        email: auth.info.email,
-        token_vk: auth.credentials.token
+        email: auth.info.email
+        #token_vk: auth.credentials.token
       )
     end
   end

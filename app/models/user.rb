@@ -55,7 +55,7 @@ class User < ApplicationRecord
   #get current account hash
   def find_account
     user = User.current_user
-    account = Account.where(user_id: user.id).find_or_create_by('')
+    accounts = Account.where(user_id: user.id)
   end  
 
   def message
@@ -64,17 +64,19 @@ class User < ApplicationRecord
   end
 
   def twitter(body)
+    secret = Account.where(provider: 'twitter').first
     @client ||= Twitter::REST::Client.new do |config|
       config.consumer_key        = Rails.application.secrets.twitter_api_key
       config.consumer_secret     = Rails.application.secrets.twitter_api_secret
-      config.access_token        = find_account.token_tw
-      config.access_token_secret = find_account.secret_tw
+      config.access_token        = secret.token_tw
+      config.access_token_secret = secret.secret_tw
     end
-    @client.update(message.body)
+    @client.update(message.body[1..140])
   end
 
   def vk(body)
-    @vk = Vkontakte::Client.new(find_account.token_vk)
-    @vk.wall.post(message: [:body])
+    sectet = Account.where(provider: 'vkontakte').first
+    @vk = VkontakteApi::Client.new(secret.token_vk)
+    @vk.wall.post(message: (body))
   end
 end

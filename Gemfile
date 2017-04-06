@@ -28,9 +28,10 @@ gem 'trix'
 gem 'paperclip'
 gem 'omniauth-twitter'
 gem 'omniauth-vkontakte'
-gem 'vkontakte_api', '~> 1.4'
 gem 'omniauth-google-oauth2'
 gem 'google-api-client', '~> 0.10'
+#gem 'vk-ruby'
+gem 'vkontakte_api', '~> 1.4'
 
 #group :production do
 #  gem 'pg'
