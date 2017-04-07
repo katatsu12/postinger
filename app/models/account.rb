@@ -29,7 +29,6 @@ class Account < ApplicationRecord
         uid: auth.uid,
         provider: auth.provider,
         email: auth.info.email
-        # token_vk: auth.credentials.token
       )
     end
   end

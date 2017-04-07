@@ -20,11 +20,10 @@ class User < ApplicationRecord
       if user.nil?
         user = User.new(
           username: auth.extra.raw_info.name,
-          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
-          # email: auth.info.email,
-          password: Devise.friendly_token[0, 20]
+          password: Devise.friendly_token[0, 20],
+          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com"
         )
-        user.skip_confirmation!
+        #user.skip_confirmation!
         user.save!
       end
     end
@@ -51,18 +50,7 @@ class User < ApplicationRecord
     end
   end
 
-  # get current account hash
-  def find_account
-    user = User.current_user
-    accounts = Account.where(user_id: user.id)
-  end
-
-  def message
-    user = User.current_user
-    post = Post.where(user_id: user.id).first
-  end
-
-  def twitter(_body)
+  def twitter
     secret = Account.where(provider: 'twitter').first
     @client ||= Twitter::REST::Client.new do |config|
       config.consumer_key        = Rails.application.secrets.twitter_api_key
@@ -70,12 +58,10 @@ class User < ApplicationRecord
       config.access_token        = secret.token_tw
       config.access_token_secret = secret.secret_tw
     end
-    @client.update(message.body[1..140])
   end
 
-  def vk(body)
+  def vk
     secret = Account.where(provider: 'vkontakte').first
     @vk = VkontakteApi::Client.new(secret.token_vk)
-    @vk.wall.post(message: body)
   end
 end
