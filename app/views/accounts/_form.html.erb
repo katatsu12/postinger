@@ -21,7 +21,7 @@
       <%= f.label :token_vk %>
       <%= f.text_field :token_vk, size: 110 %>
     </div>
-  <% else @account.provider == 'twitter' %>
+  <% elsif @account.provider == 'twitter' %>
     <div>
       <%= f.label :token_tw %>
       <%= f.text_field :token_tw, size: 110 %>
@@ -30,6 +30,8 @@
       <%= f.label :secret_tw %>
       <%= f.text_field :secret_tw, size: 110 %>
     </div>
+    <% elsif @account.provider == 'facebook' %>
+      <%= %>
   <% end %>
   
   <div class="form-actions">

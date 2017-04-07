@@ -58,13 +58,8 @@ class PostsController < ApplicationController
     params[:body].inspect.to_s.gsub!(/<[a-zA-Z\/][^>]*>/,"").to_s
   end
 
-  def split_body
-    
-  end
-
   def send_vk
     current_user.vk.wall.post(message: message)
-    #current_user.vk(params[:body].inspect)
     redirect_to :back, notice: 'Post was seccussefully send to vk'
   end
 

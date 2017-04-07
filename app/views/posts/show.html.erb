@@ -20,13 +20,21 @@
 <%= link_to 'Edit', edit_post_path(@post) %> |
 <%= link_to 'Back', posts_path %>
 
-<p>
-  <%= form_for :body, url: send_tweet_path, method: :post do |f| %>
-    <%= f.hidden_field :body, { value: @post.body }%>
-    <%= f.submit "Send Tweet" %>
+<% accounts = Account.where(user_id: [current_user.id]).select(:provider).each do |q| %>
+  <% if q.provider == 'twitter' %>
+    <%= form_for :body, url: send_tweet_path, method: :post do |f| %>
+      <%= f.hidden_field :body, { value: @post.body }%>
+      <%= f.submit "Send Tweet" %>
+    <% end %>
+  <% elsif q.provider == 'vkontakte' %>
+    <%= form_for :body, url: send_vk_path, method: :post do |f| %>
+      <%= f.hidden_field :body, { value: @post.body }%>
+      <%= f.submit "Send to VK" %>
+    <% end %>
+  <% elsif q.provider == 'google_oauth2' %>
+    <%= form_for :body, url: send_vk_path, method: :post do |f| %>
+      <%= f.hidden_field :body, { value: @post.body }%>
+      <%= f.submit "Send to Google+" %>
+    <% end %>
   <% end %>
-  <%= form_for :body, url: send_vk_path, method: :post do |f| %>
-    <%= f.hidden_field :body, { value: @post.body }%>
-    <%= f.submit "Send to VK" %>
-  <% end %>
-</p>
+<% end %>
