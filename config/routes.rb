@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   get  '/get_vk_token', to: 'accounts#get_vk_token'
   resources :accounts
   get '/:page', to: 'pages#show'
+  resources :rssfeeds
 end

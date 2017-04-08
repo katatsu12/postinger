@@ -30,8 +30,8 @@ gem 'trix'
 gem 'turbolinks', '~> 5'
 gem 'twitter'
 gem 'uglifier', '>= 1.3.0'
-# gem 'vk-ruby'
 gem 'vkontakte_api', '~> 1.4'
+gem 'feedjira'
 
 # group :production do
 #  gem 'pg'
