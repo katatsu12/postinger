@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  TEMP_EMAIL_PREFIX = 'change@me'.freeze
+  TEMP_EMAIL_PREFIX = '@'.freeze
   TEMP_EMAIL_REGEX = /\Achange@me/
 
   has_many :posts
@@ -7,8 +7,9 @@ class User < ApplicationRecord
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable,
-         omniauth_providers: %i[facebook twitter vkontakte google_oauth2]
+         :omniauthable
+
+  #validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
 
   def self.find_for_oauth(auth, signed_in_resource = nil)
     identity = Account.find_for_oauth(auth)
@@ -19,11 +20,9 @@ class User < ApplicationRecord
       user = User.where(email: email).first if email
       if user.nil?
         user = User.new(
-          username: auth.extra.raw_info.name,
           password: Devise.friendly_token[0, 20],
-          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com"
+          email: "#{auth.uid}#{TEMP_EMAIL_PREFIX}#{auth.provider}.com"
         )
-        #user.skip_confirmation!
         user.save!
       end
     end
