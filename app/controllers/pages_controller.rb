@@ -1,5 +1,7 @@
 class PagesController < ApplicationController
+  skip_before_action :authenticate_user!, only: :show
+
   def show
-    render layout: false, template: "pages/#{params[:page]}"
+    render template: "pages/#{params[:page]}"
   end
 end
