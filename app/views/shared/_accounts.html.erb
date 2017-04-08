@@ -1,11 +1,8 @@
 <h2>Accounts</h2>
 
-<div>
-  <%= link_to 'Add twitter account', '/users/auth/twitter' %>
-  <%= link_to 'Add fb account', '/users/auth/facebook' %>
-  <%= link_to 'Add google account', '/users/auth/google_oauth2' %>
-  <%= link_to 'Add VK account', '/users/auth/vkontakte' %>
-</div>
+  <%= link_to 'Add twitter account', '/users/auth/twitter' %><br />
+  <%= link_to 'Add fb account', '/users/auth/facebook' %><br />
+  <%= link_to 'Add VK account', '/users/auth/vkontakte' %><br />
 
 <table>
   <tr>
@@ -13,14 +10,18 @@
     <th>Accounts</th>
     <th></th>
   </tr>
-    <% Account.all.each_with_index do |account, index| %>
-    <tr>
-      <td><%= index.to_i + 1 %></td>
-      <td>
-        <%= account.provider %>
-        <%= account.email %>
-        <%= link_to 'Show', account %>
-      </td>
-    </tr>
+
+  <% Account.all.each_with_index do |account, index| %>
+
+  <tr>
+    <td><%= index.to_i + 1 %></td>
+    <td>
+      <%= account.provider %>
+      <%= account.email %>
+      <%= link_to 'Show', account %>
+    </td>
+  </tr>
+
   <% end %>
+
 </table>

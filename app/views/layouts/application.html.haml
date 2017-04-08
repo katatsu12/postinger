@@ -11,6 +11,9 @@
 		.container
 			.navbar-brand= link_to "Postinger", root_path
 
+			%ul.nav.navbar-nav.navbar-right
+				%li= link_to "About", 'about'
+
 			- if user_signed_in?
 				%ul.nav.navbar-nav.navbar-right
 					%li= link_to "New Post", new_post_path
@@ -20,11 +23,6 @@
 				%ul.nav.navbar-nav.navbar-right
 					%li= link_to "Sign Up",  new_user_registration_path
 					%li= link_to "Sign In", new_user_session_path
-			%ul.nav.navbar-nav.navbar-right
-				%li= link_to "Sign up twitter", '/users/auth/twitter'
-				%li= link_to "Sign up facebook", '/users/auth/facebook'
-				%li= link_to "Sign up vk", '/users/auth/vkontakte'
-				%li= link_to "Sign up google", '/users/auth/google_oauth2'
 
 	.container
 		= yield
