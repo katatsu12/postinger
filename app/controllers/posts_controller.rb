@@ -25,7 +25,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      redirect_to @post, notice: 'Post was successfully updated.' 
+      redirect_to @post, notice: 'Post was successfully updated.'
     else
       render :edit
     end
@@ -40,7 +40,7 @@ class PostsController < ApplicationController
     current_user.twitter.update(message[0...140])
     redirect_to :back, notice: 'Post was seccussefully send to twitter'
   end
- 
+
   def message
     params[:body].inspect.to_s.gsub!(/<[a-zA-Z\/][^>]*>/,"").to_s
   end

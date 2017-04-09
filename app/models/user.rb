@@ -61,7 +61,8 @@ class User < ApplicationRecord
   end
 
   def facebook
-    @facebook ||= Koala::Facebook::API.new(oauth_token)
+    secret = Account.where(provider: 'facebook').first
+    @facebook ||= Koala::Facebook::API.new(secret.token_fb)
   end
 
   def vk
