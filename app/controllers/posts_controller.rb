@@ -50,6 +50,11 @@ class PostsController < ApplicationController
     redirect_to :back, notice: 'Post was seccussefully send to vk'
   end
 
+  def send_fb
+    current_user.facebook.put_wall_post(message)
+    redirect_to :back, notice: 'Post was seccussefully send to fb'
+  end
+
   def rss
     #url = Rssfeed.where(user_id: [current_user.id])
     #feed = Feedjira::Feed.fetch_and_parse(url)
