@@ -1,52 +1,39 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[show edit update destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
 
   def index
     @posts = Post.where(user_id: [current_user.id])
-    @accounts = Account.where(user_id: [current_user.id])
- end
-
-  def show
   end
+
+  def show;end
 
   def new
     @post = Post.new
   end
 
-  def edit; end
+  def edit;end
 
   def create
     @post = Post.new(post_params)
     @post.user_id = current_user.id
-    respond_to do |format|
-      if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        format.json { render :show, status: :created, location: @post }
-      else
-        format.html { render :new }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.save
+      redirect_to @post, notice: 'Post was successfully created.'
+    else
+      render :new
     end
   end
 
   def update
-    respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.update(post_params)
+      redirect_to @post, notice: 'Post was successfully updated.' 
+    else
+      render :edit
     end
   end
 
   def destroy
     @post.destroy
-    respond_to do |format|
-      format.html { redirect_to posts_url, notice: 'Post was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to posts_url, notice: 'Post was successfully destroyed.'
   end
 
   def send_tweet
@@ -61,6 +48,17 @@ class PostsController < ApplicationController
   def send_vk
     current_user.vk.wall.post(message: message)
     redirect_to :back, notice: 'Post was seccussefully send to vk'
+  end
+
+  def rss
+    #url = Rssfeed.where(user_id: [current_user.id])
+    #feed = Feedjira::Feed.fetch_and_parse(url)
+    #feeds = feed.entries
+    #feeds.each do |f|
+    #  @post = Post.new(user_id: [current_user.id], title: [f.title], body: [f.summary])
+    #  @post.save
+    #end
+    #redirect_to root_path
   end
 
   private

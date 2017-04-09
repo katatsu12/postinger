@@ -1,9 +1,11 @@
 class RssfeedsController < ApplicationController
-  before_action :set_rssfeed, only: [:edit, :update, :destroy]
+  before_action :set_rssfeed, only: [:show, :edit, :update, :destroy]
 
   def index
-    @rssfeeds = Rssfeed.where(user_id: [surrent_user.id])
+    @rssfeeds = Rssfeed.where(user_id: [current_user.id])
   end
+
+  def show;end
 
   def new
     @rssfeed = Rssfeed.new
@@ -11,11 +13,11 @@ class RssfeedsController < ApplicationController
 
   def edit;end
 
-  end create
+  def create
     @rssfeed = Rssfeed.new(rssfeed_params)
     @rssfeed.user_id = current_user.id
     if @rssfeed.save
-      redirect_to rssfeeds_path, notice: 'Post was successfully updated.'
+      redirect_to root_path, notice: 'RSS was successfully updated.'
     else
       render :new
     end
@@ -23,15 +25,15 @@ class RssfeedsController < ApplicationController
 
   def update
     if @rssfeed.update(rssfeed_params)
-      redirect_to rssfeeds_path, notice: 'Post was successfully updated.' 
+      redirect_to rssfeeds_path, notice: 'RSS was successfully updated.' 
     else
-      render :edit, notice: 'Post was successfully updated.'  
+      render :edit, notice: 'RSS was successfully updated.'  
     end
   end
 
   def destroy
     @rssfeed.destroy
-    redirect_to rssfeed_path, notice: 'Post was successfully destroyed.'
+    redirect_to root_path, notice: 'RSS was successfully destroyed.'
   end
 
   private

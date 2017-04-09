@@ -1,24 +1,16 @@
-<h2>Accounts</h2>
-
-  <%= link_to 'Add twitter account', '/users/auth/twitter' %><br />
-  <%= link_to 'Add fb account', '/users/auth/facebook' %><br />
-  <%= link_to 'Add VK account', '/users/auth/vkontakte' %><br />
+<h3>
+  <%= link_to 'Accounts', accounts_path %>
+</h3>
 
 <table>
-  <tr>
-    <th>#</th>
-    <th>Accounts</th>
-    <th></th>
-  </tr>
 
-  <% Account.all.each_with_index do |account, index| %>
+  <% Account.where(user_id: current_user.id).each_with_index do |account, index| %>
 
   <tr>
     <td><%= index.to_i + 1 %></td>
     <td>
       <%= account.provider %>
       <%= account.email %>
-      <%= link_to 'Show', account %>
     </td>
   </tr>
 

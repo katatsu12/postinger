@@ -1,0 +1,17 @@
+<%= simple_form_for(@rssfeed) do |f| %>
+  <%= f.error_notification %>
+
+  <div>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div>
+    <%= f.label :url %>
+    <%= f.text_field :url %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

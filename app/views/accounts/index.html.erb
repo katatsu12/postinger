@@ -1,6 +1,9 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Accounts</h1>
+
+  <%= link_to 'Add twitter account', '/users/auth/twitter' %><br />
+  <%= link_to 'Add fb account', '/users/auth/facebook' %><br />
+  <%= link_to 'Add VK account', '/users/auth/vkontakte' %><br />
+
 
 <table>
   <thead>
@@ -14,8 +17,8 @@
   <tbody>
     <% @accounts.each do |account| %>
       <tr>
-        <td><%= account.account %></td>
-        <td><%= account.user %></td>
+        <td><%= account.provider %></td>
+        <td><%= account.email %></td>
         <td><%= link_to 'Show', account %></td>
         <td><%= link_to 'Edit', edit_account_path(account) %></td>
         <td><%= link_to 'Destroy', account, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -24,6 +27,5 @@
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Account', new_account_path %>
+<%= link_to 'New Account', new_account_path %><br />
+<%= link_to 'Back', root_path %><br />

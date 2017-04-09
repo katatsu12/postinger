@@ -1,0 +1,12 @@
+<p>
+  <strong>Title:</strong>
+  <%= @rssfeed.title %>
+</p>
+
+<p>
+  <strong>RSS url:</strong>
+  <%= @rssfeed.url %>
+</p>
+
+<%= link_to 'Edit', edit_rssfeed_path(@rssfeed) %><br />
+<%= link_to 'Back', rssfeeds_path %><br />

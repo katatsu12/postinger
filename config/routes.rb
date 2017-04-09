@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :accounts
   devise_for :users, controllers: { omniauth_callbacks: 'callbacks' }
   resources :posts
+  resources :rssfeeds
   root 'posts#index'
   match '/users/:id/finish_signup' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
   post '/send_tweet', to: 'posts#send_tweet'
@@ -9,5 +10,5 @@ Rails.application.routes.draw do
   get  '/get_vk_token', to: 'accounts#get_vk_token'
   resources :accounts
   get '/:page', to: 'pages#show'
-  resources :rssfeeds
+  match '/posts/rss' => 'posts#rss', via: [:get, :post], :as => :rss
 end
