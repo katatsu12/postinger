@@ -36,5 +36,10 @@
       <%= f.hidden_field :body, { value: @post.body }%>
       <%= f.submit "Send to Google+" %>
     <% end %>
+  <% elsif q.provider == 'facebook' %>
+    <%= form_for :body, url: send_fb_path, method: :post do |f| %>
+      <%= f.hidden_field :body, { value: @post.body }%>
+      <%= f.submit "Send to FB" %>
+    <% end %>
   <% end %>
 <% end %>
