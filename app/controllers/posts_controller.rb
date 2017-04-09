@@ -52,7 +52,7 @@ class PostsController < ApplicationController
 
   def send_fb
     current_user.facebook.put_wall_post(message)
-    redirect_to :back, notice: 'Post was seccussefully send to fb'
+    redirect_to :back, notice: 'Post was seccussefully send to Facebook'
   end
 
   def rss
