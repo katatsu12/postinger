@@ -10,3 +10,9 @@
 
 <%= link_to 'Edit', edit_rssfeed_path(@rssfeed) %><br />
 <%= link_to 'Back', rssfeeds_path %><br />
+
+<%= form_for :url, url: rss_path, method: :post do |f| %>
+  <%= f.hidden_field :url, { value: @rssfeed.url }%>
+  <%= f.submit "Get RSS" %>
+<% end %>
+

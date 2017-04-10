@@ -55,17 +55,6 @@ class PostsController < ApplicationController
     redirect_to :back, notice: 'Post was seccussefully send to Facebook'
   end
 
-  def rss
-    #url = Rssfeed.where(user_id: [current_user.id])
-    #feed = Feedjira::Feed.fetch_and_parse(url)
-    #feeds = feed.entries
-    #feeds.each do |f|
-    #  @post = Post.new(user_id: [current_user.id], title: [f.title], body: [f.summary])
-    #  @post.save
-    #end
-    #redirect_to root_path
-  end
-
   private
 
   def set_post

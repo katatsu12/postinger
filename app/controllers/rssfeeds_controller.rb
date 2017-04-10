@@ -1,5 +1,5 @@
 class RssfeedsController < ApplicationController
-  before_action :set_rssfeed, only: [:show, :edit, :update, :destroy]
+  before_action :set_rssfeed, only: [:show, :edit, :update, :destroy, :rss]
 
   def index
     @rssfeeds = Rssfeed.where(user_id: [current_user.id])
@@ -17,7 +17,7 @@ class RssfeedsController < ApplicationController
     @rssfeed = Rssfeed.new(rssfeed_params)
     @rssfeed.user_id = current_user.id
     if @rssfeed.save
-      redirect_to root_path, notice: 'RSS was successfully updated.'
+      redirect_to rssfeeds_path, notice: 'RSS was successfully created.'
     else
       render :new
     end
@@ -34,6 +34,15 @@ class RssfeedsController < ApplicationController
   def destroy
     @rssfeed.destroy
     redirect_to root_path, notice: 'RSS was successfully destroyed.'
+  end
+
+  def rss
+    feeds = Feedjira::Feed.fetch_and_parse(@rssfeed.url)
+    feeds.entries.each do |feed|
+      @post = Post.new(user_id: current_user.id, title: feed.title, body: feed.summary)
+      @post.save
+    end
+    redirect_to rssfeed_path, notice: 'Posts were successfully created.'
   end
 
   private
